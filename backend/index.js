@@ -7,6 +7,7 @@ const app = express()
 app.use(express.json())
 
 app.use("/api/auth",require("./routers/Auth"));
+app.use("/api/notes",require("./routers/Notes"));
 
 app.listen(5000)
 

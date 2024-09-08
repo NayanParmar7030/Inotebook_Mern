@@ -2,13 +2,11 @@ const jwt = require('jsonwebtoken');
 const securekey = "Nayan@7030";
 
 const fetchUsers = (req, res, next) => {
-    console.log("Inside fetchUsers middleware");
-    const rqToken = req.headers['auth-token']; // Correct way to access header
+    const rqToken = req.headers['auth-token'];
 
     if (!rqToken) {
         return res.status(401).send({ error: "Auth token is missing" });
     }
-
     try {
         const data = jwt.verify(rqToken, securekey);
         req.user = data.user;
