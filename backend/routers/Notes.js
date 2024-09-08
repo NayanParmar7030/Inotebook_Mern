@@ -44,4 +44,41 @@ router.post('/addnote',fetchuser,[
     
 });
 
+// Route 3: Update User Note Endpoint code:  http://localhost:5000/api/notes/updatenote
+
+router.put('/updatenote/:id',fetchuser, async (req,res)=>{
+    const token = req.headers['auth-token'];
+    
+    if (!token) {
+        return res.status(401).json({ message: "Access denied. No token provided." });
+    }
+
+    try {
+    
+        const note = await Notes.findById(req.params.id);
+        
+        if(!note){
+           return res.status(401).json("Note is not found");
+        }
+
+        if(note.user.toString() != req.user.id){
+           return  res.status(401).json("You don't have permission to update this note");
+        }
+
+        const {title, description, tag} = req.body;
+
+        const newNote = {};
+
+        if(title) {newNote.title = title};
+        if(description) {newNote.description = description};
+        if(tag) {newNote.tag = tag};
+
+       const updatedNote =  await Notes.findByIdAndUpdate(req.params.id, { $set: newNote },{new:true});
+
+       return res.status(200).json({ message: "Note updated successfully", updatedNote });
+    } catch (error) {
+        res.status(500).json({ message11: error });
+    }
+    
+});
 module.exports = router;
