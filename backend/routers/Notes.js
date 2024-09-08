@@ -44,7 +44,7 @@ router.post('/addnote',fetchuser,[
     
 });
 
-// Route 3: Update User Note Endpoint code:  http://localhost:5000/api/notes/updatenote
+// Route 3: Update User Note Endpoint code:  http://localhost:5000/api/notes/updatenote/:id
 
 router.put('/updatenote/:id',fetchuser, async (req,res)=>{
     const token = req.headers['auth-token'];
@@ -76,6 +76,36 @@ router.put('/updatenote/:id',fetchuser, async (req,res)=>{
        const updatedNote =  await Notes.findByIdAndUpdate(req.params.id, { $set: newNote },{new:true});
 
        return res.status(200).json({ message: "Note updated successfully", updatedNote });
+    } catch (error) {
+        res.status(500).json({ message11: error });
+    }
+    
+});
+
+// Route 4: Delete User Note Endpoint code:  http://localhost:5000/api/notes/deletenote/:id
+
+router.delete('/deletenote/:id',fetchuser, async (req,res)=>{
+    const token = req.headers['auth-token'];
+    
+    if (!token) {
+        return res.status(401).json({ message: "Access denied. No token provided." });
+    }
+
+    try {
+    
+        const note = await Notes.findById(req.params.id);
+        
+        if(!note){
+           return res.status(401).json("Note is not found");
+        }
+
+        if(note.user.toString() != req.user.id){
+           return  res.status(401).json("You don't have permission to delete this note");
+        }
+
+       const deletedNote =  await Notes.findByIdAndDelete(req.params.id);
+       return res.status(200).json({ message: "Note deleted successfully", deletedNote });
+
     } catch (error) {
         res.status(500).json({ message11: error });
     }
