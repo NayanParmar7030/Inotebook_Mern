@@ -35,7 +35,8 @@ router.post('/addnote',fetchuser,[
             title,description,tag,user:req.user.id
         });
         const saveNote = await note.save();
-        res.json(saveNote);
+        // res.json(saveNote);
+        return res.status(200).json({ success:true, message: "Note Added successfully", saveNote });
 
     } catch (error) {
         console.error("Error in /getuser:", error);
@@ -75,7 +76,7 @@ router.put('/updatenote/:id',fetchuser, async (req,res)=>{
 
        const updatedNote =  await Notes.findByIdAndUpdate(req.params.id, { $set: newNote },{new:true});
 
-       return res.status(200).json({ message: "Note updated successfully", updatedNote });
+       return res.status(200).json({ success:true, message: "Note updated successfully", updatedNote });
     } catch (error) {
         res.status(500).json({ message11: error });
     }

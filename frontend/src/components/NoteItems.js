@@ -8,13 +8,15 @@ function NoteItems(props) {
     const { deleteNote,updateNote } = context;
 
     const [modalVisible, setModalVisible] = useState(false);
+    
 
     const handleDelete = (id) => {
         deleteNote(id);
     };
 
-    const handleUpdate = (data) => {
-        updateNote(data);
+    const handleUpdate =async (data) => {
+       const updateNoteData =  await updateNote(data);
+       props.alertData(updateNoteData);
     }
 
     const handleOpenModal = () => {
@@ -27,6 +29,7 @@ function NoteItems(props) {
 
     return (
         <div className='col-md-3 my-3'>
+            
             <div className="card">
                 <div className="card-body my-3">
                     <h5 className="card-title">{note.title}</h5>

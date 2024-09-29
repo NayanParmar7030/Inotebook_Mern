@@ -33,20 +33,31 @@ const NoteState = (props) => {
 
   // Add note
 
-  const addNote = (props) => {
+  const addNote = async (props) => {
 
+    try {
+      const newNoteData = await fetch(`${host}/api/notes/addnote/`, {
+        method: "POST",
+        headers: {
+          'content-type': 'application/json',
+          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkZGJjYjI0M2MzNjcxMWU2OThmYTNhIn0sImlhdCI6MTcyNTgwNzgxNH0.f6_r9L__mSO-GsqzjNQSkJxv9uzPn-Y1L82keFfZTm8',
+        },
+        body: JSON.stringify(props),
 
-    const newnote = {
-      "_id": "asdasdasdasd12312",
-      "user": "66ddbcb243c36711e698fa3a",
-      "title": props.title,
-      "description": props.description,
-      "tag": props.tag,
-      "date": "2024-09-21T10:55:25.344Z",
-      "__v": 0
-    };
+      });
+      const InsertedData = await newNoteData.json();
 
-    setNotes(notes.concat(newnote));
+      if(InsertedData.success && typeof InsertedData.saveNote !='undefined'){
+        console.log("in");
+        setNotes(notes.concat(InsertedData.saveNote));
+      }
+      // setNotes(SaveData)
+       return InsertedData;
+      
+    } catch (error) {
+        console.log("error",error);
+    }
+
   }
 
   // Delete note
@@ -86,11 +97,10 @@ const NoteState = (props) => {
 
       });
       const updatedjson = await updateData.json();
-
-      console.log("updatedjson",updatedjson);
+      return updatedjson;
       
     } catch (error) {
-
+        console.log("error",error);
     }
 
   }
