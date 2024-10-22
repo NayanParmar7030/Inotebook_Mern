@@ -1,7 +1,6 @@
-
-import NoteItems from './NoteItems'
-import Notescontext from '../context/NotesContext'
-import React, { useContext, useEffect, useState } from 'react'
+import NoteItems from './NoteItems';
+import Notescontext from '../context/NotesContext';
+import React, { useContext, useEffect, useState } from 'react';
 
 function Notes() {
   const notesdata = useContext(Notescontext);
@@ -11,7 +10,7 @@ function Notes() {
 
   useEffect(() => {
     getNotes();
-  }, [])
+  }, [alert]);
 
   const alertData = (data) => {
     if (data.message) {
@@ -19,28 +18,29 @@ function Notes() {
       setAlertMessage(data.message);
       setTimeout(() => {
         setAlert(false);
-    }, 2000);
+      }, 2000);
     }
-  }
+  };
 
   return (
     <div className='row my-3'>
-      {
-        alert && typeof alertMessage != "undefined" ? (
-          <div class="alert alert-primary" role="alert">
-            {alertMessage}
-          </div>
-        ) : ''
-      }
-      {
-        notes.length > 0 ?
-          notes.map((value) => {
-            return <NoteItems note={value} alertData={alertData} />
-          }) : 'Sorry no records are found.'
-      }
+      {alert && typeof alertMessage !== 'undefined' ? (
+        <div className='alert alert-primary' role='alert'>
+          {alertMessage}
+        </div>
+      ) : (
+        ''
+      )}
 
+      {notes.length > 0 ? (
+        notes.map((value) => {
+          return <NoteItems key={value.id} note={value} alertData={alertData} />;
+        })
+      ) : (
+        'Sorry, no records are found.'
+      )}
     </div>
-  )
+  );
 }
 
-export default Notes
+export default Notes;

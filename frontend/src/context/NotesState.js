@@ -14,7 +14,7 @@ const NoteState = (props) => {
         method: "GET",
         headers: {
           'content-type': 'application/json',
-          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkZGJjYjI0M2MzNjcxMWU2OThmYTNhIn0sImlhdCI6MTcyNTgwNzgxNH0.f6_r9L__mSO-GsqzjNQSkJxv9uzPn-Y1L82keFfZTm8',
+          'auth-token': localStorage.getItem('token'),
         }
 
       });
@@ -31,6 +31,9 @@ const NoteState = (props) => {
 
   const [notes, setNotes] = useState(initialNotes);
 
+  const authValue = localStorage.getItem('token');
+  
+
   // Add note
 
   const addNote = async (props) => {
@@ -40,7 +43,7 @@ const NoteState = (props) => {
         method: "POST",
         headers: {
           'content-type': 'application/json',
-          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkZGJjYjI0M2MzNjcxMWU2OThmYTNhIn0sImlhdCI6MTcyNTgwNzgxNH0.f6_r9L__mSO-GsqzjNQSkJxv9uzPn-Y1L82keFfZTm8',
+          'auth-token': authValue,
         },
         body: JSON.stringify(props),
 
@@ -69,7 +72,7 @@ const NoteState = (props) => {
         method: "DELETE",
         headers: {
           'content-type': 'application/json',
-          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkZGJjYjI0M2MzNjcxMWU2OThmYTNhIn0sImlhdCI6MTcyNTgwNzgxNH0.f6_r9L__mSO-GsqzjNQSkJxv9uzPn-Y1L82keFfZTm8',
+          'auth-token': authValue,
         }
 
       });
@@ -84,6 +87,7 @@ const NoteState = (props) => {
 
   // update note
 
+
   const updateNote = async (notedata) => {
 
     try {
@@ -91,7 +95,7 @@ const NoteState = (props) => {
         method: "PUT",
         headers: {
           'content-type': 'application/json',
-          'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZkZGJjYjI0M2MzNjcxMWU2OThmYTNhIn0sImlhdCI6MTcyNTgwNzgxNH0.f6_r9L__mSO-GsqzjNQSkJxv9uzPn-Y1L82keFfZTm8',
+          'auth-token': authValue,
         },
         body: JSON.stringify(notedata),
 
@@ -104,6 +108,11 @@ const NoteState = (props) => {
     }
 
   }
+
+  // Auth Token
+
+  
+
   return (
     <Notescontext.Provider value={{ notes, addNote, deleteNote, getNotes,updateNote }}>
       {props.children}
