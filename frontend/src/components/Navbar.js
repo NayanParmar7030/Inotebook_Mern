@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
 import { useNavigate  } from 'react-router-dom';
 
+import Notescontext from '../context/NotesContext';
 const Navbar = () => {
   const location = useLocation();
   const [modalVisible, setModalVisible] = useState(false);
   const [loginModalVisible, setloginModalVisible] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-
+  const NotescontextData = useContext(Notescontext);
+  const {logout,tokenData,storeToken} = NotescontextData;
   const navigate  = useNavigate();
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -22,9 +23,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-   
-    localStorage.removeItem('token');
-    setIsLoggedIn(null);
+    logout();
     navigate('/');
 
   }
@@ -39,8 +38,7 @@ const Navbar = () => {
 
   const handleLoginData = (token) => {
     if(token){
-      console.log("handleLoginData",token);
-      setIsLoggedIn(token);
+      storeToken(token);
     }
   }
 
@@ -63,7 +61,7 @@ const Navbar = () => {
             </ul>
             <div className="d-flex">
               {
-              !isLoggedIn ? (
+              !tokenData ? (
                 <>
                 <button type="button" className="btn btn-light me-2" onClick={handleOpenModal}>Signup</button>
                 <button type="button" className="btn btn-light me-2" onClick={handleLoginOpenModal}>Login</button>

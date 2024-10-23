@@ -8,7 +8,7 @@ function LoginModal({show, onClose,handleLoginData }) {
     const [errors,setErrors] = useState({});
     const notesdata = useContext(Notescontext);
 
-    const {authToken} = notesdata;
+    const {storeToken} = notesdata;
     useEffect(() => {
         if (window.bootstrap && modalRef.current) {
             modalInstance.current = new window.bootstrap.Modal(modalRef.current);
@@ -54,14 +54,18 @@ function LoginModal({show, onClose,handleLoginData }) {
                     password:loginData.password
                 })
                if(postData.data.authToken){
-                localStorage.setItem('token',postData.data.authToken)
-                handleLoginData(postData.data.authToken)
+                // localStorage.setItem('token',postData.data.authToken)
+                storeToken(postData.data.authToken);
+                handleLoginData(postData.data.authToken);
+                modalInstance.current.hide();
+               }
+               else{
+                    setErrors({APIErrors:"Login Failed, Please try again."})
                }
             } catch (error) {
-                console.error('error:', error.response.data);
-                // setErrors({ apiError: 'Login failed. Please try again.' });
+                setErrors({APIErrors:"Login Failed, Please try again."})
             }
-            modalInstance.current.hide();
+            
         }
         else{
             setErrors(validateForm);
@@ -83,6 +87,7 @@ function LoginModal({show, onClose,handleLoginData }) {
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">Login</h5>
+                        {errors && errors.APIErrors ? <small className="text-danger">{errors.APIErrors}</small>:''}
                         <button type="button" className="close" onClick={handleClose} aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

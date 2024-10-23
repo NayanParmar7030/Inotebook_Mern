@@ -1,12 +1,14 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import Notes from './Notes';
 import AddNote from './AddNote';
-
+import Notescontext from '../context/NotesContext';
 const Home = () => {
+  const { tokenData } = useContext(Notescontext);
+  console.log("authToken1111",tokenData);
   return (
     <div className='container my-3'>
       {
-        localStorage.getItem('token') ? (
+        tokenData ? (
           <>
             <h1>Add Your Note</h1>
             <AddNote />

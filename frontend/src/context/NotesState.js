@@ -33,7 +33,7 @@ const NoteState = (props) => {
 
   const authValue = localStorage.getItem('token');
   
-
+  const [tokenData,setAuthToken] = useState(authValue);
   // Add note
 
   const addNote = async (props) => {
@@ -111,10 +111,18 @@ const NoteState = (props) => {
 
   // Auth Token
 
-  
+  const storeToken = (token) => {
+    localStorage.setItem("token",token);
+    setAuthToken(token);
+  }
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setAuthToken(null); 
+  };
 
   return (
-    <Notescontext.Provider value={{ notes, addNote, deleteNote, getNotes,updateNote }}>
+    <Notescontext.Provider value={{ notes, addNote, deleteNote, getNotes,updateNote,storeToken, tokenData,logout }}>
       {props.children}
     </Notescontext.Provider>
   )
